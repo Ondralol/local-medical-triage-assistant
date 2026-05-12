@@ -38,7 +38,7 @@
         <mxCell id="aHj3oTs3HQtHgEqtrpzf-11" edge="1" parent="1" source="aHj3oTs3HQtHgEqtrpzf-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="aHj3oTs3HQtHgEqtrpzf-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="aHj3oTs3HQtHgEqtrpzf-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Rag Extracts top k results" vertex="1">
+        <mxCell id="aHj3oTs3HQtHgEqtrpzf-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="RAG Extracts top k results" vertex="1">
           <mxGeometry height="90" width="210" x="510" y="330" as="geometry" />
         </mxCell>
         <mxCell id="aHj3oTs3HQtHgEqtrpzf-13" edge="1" parent="1" source="aHj3oTs3HQtHgEqtrpzf-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="aHj3oTs3HQtHgEqtrpzf-12">
@@ -53,7 +53,7 @@
             <mxPoint x="480" y="770" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="aHj3oTs3HQtHgEqtrpzf-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Comibine the best results" vertex="1">
+        <mxCell id="aHj3oTs3HQtHgEqtrpzf-9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Combine the best results" vertex="1">
           <mxGeometry height="90" width="255" x="345" y="500" as="geometry" />
         </mxCell>
         <mxCell id="aHj3oTs3HQtHgEqtrpzf-15" edge="1" parent="1" source="aHj3oTs3HQtHgEqtrpzf-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="aHj3oTs3HQtHgEqtrpzf-16">
@@ -126,7 +126,7 @@
             <mxPoint x="1640" y="460" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="aHj3oTs3HQtHgEqtrpzf-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Rag Extracts top k results" vertex="1">
+        <mxCell id="aHj3oTs3HQtHgEqtrpzf-28" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="RAG Extracts top k results" vertex="1">
           <mxGeometry height="90" width="210" x="1370" y="480" as="geometry" />
         </mxCell>
         <mxCell id="aHj3oTs3HQtHgEqtrpzf-42" edge="1" parent="1" source="aHj3oTs3HQtHgEqtrpzf-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;">
