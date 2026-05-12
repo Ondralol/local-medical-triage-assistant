@@ -25,6 +25,13 @@ uv run src/main.py --model <model_name>
 ```
 where <model_name> is the name of local LLM you downloaded with ollama
 
+### Run the Streamlit UI
+After syncing dependencies, start the web UI with
+```
+uv run streamlit run src/streamlit_app.py
+```
+You can change the Ollama model from the sidebar or keep the default.
+
 ### Run the jupyter notebooks 
 First run
 ```
@@ -54,4 +61,3 @@ MedQuAD, short for Medical Question Answering Dataset, is a collection of questi
 ### Datasets
 - To match the diseases and symptoms we used `MedQuAD: Medical Question-Answer Dataset`. Which is a large dataset containing collection of question-answer pairs covering a wide range of medical topics. You can find the dataset [here](https://www.kaggle.com/datasets/pythonafroz/medquad-medical-question-answer-for-ai-research?resource=download)
 - Since the dataset contains a lot of question from different areas and we are mainly interested in the symptopms, we filtered the dataset to only get the questions that contain one of the following: "symptom", "signs", "cause", "disease", "condition", "syndrome"
-
