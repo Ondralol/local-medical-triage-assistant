@@ -7,6 +7,7 @@ st.set_page_config(page_title="Symptom Checker", layout="centered")
 @st.cache_resource
 def get_pipeline():
     return Pipeline()
+
 st.title("Medical triage assistant")
 
 def reset_assessment() -> None:

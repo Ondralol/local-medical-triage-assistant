@@ -70,17 +70,6 @@ def extract_symptoms(model: str, user_input: str) -> str:
     )
     return response.message.content.strip()
 
-
-def get_diagnosis(model: str, symptoms: str) -> str:
-    response = ollama.chat(
-        model=model,
-        messages=[
-            {"role": "system", "content": DIAGNOSE_PROMPT},
-            {"role": "user", "content": f"Symptoms: {symptoms}"}
-        ],
-    )
-    return response.message.content.strip()
-
 def get_app_diagnosis(model: str, symptoms: str, rag_response: str) -> str:
     response = ollama.chat(
         model=model,
