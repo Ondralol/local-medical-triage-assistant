@@ -1,7 +1,7 @@
 import time
 import streamlit as st
 import json
-from medical_chat import DEFAULT_MODEL, extract_symptoms, prompt_checker, get_app_diagnosis, is_model_available
+from utils.medical_chat import DEFAULT_MODEL, extract_symptoms, prompt_checker, get_app_diagnosis, is_model_available
 
 st.set_page_config(page_title="Symptom Checker", layout="centered")
 

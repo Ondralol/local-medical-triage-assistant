@@ -1,6 +1,6 @@
 import argparse
 import time
-from medical_chat import DEFAULT_MODEL, extract_symptoms, get_diagnosis
+from utils.medical_chat import DEFAULT_MODEL, extract_symptoms, get_diagnosis
 
 
 def main():
