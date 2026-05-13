@@ -2,7 +2,7 @@ import time
 import streamlit as st
 import json
 from utils.medical_chat import DEFAULT_MODEL, extract_symptoms, prompt_checker, get_app_diagnosis, is_model_available
-
+from utils.pipeline import Pipeline
 st.set_page_config(page_title="Symptom Checker", layout="centered")
 
 st.title("Medical triage assistant")
@@ -69,7 +69,12 @@ if analyze_clicked:
                 st.warning("The extracted symptoms do not seem valid. Please adjust the input accordingly.")
                 print(f"Prompt check response: {prompt_check}")
             else:
-                diagnosis = get_app_diagnosis(model_name, extracted)
+                # RAG RESPONSE 
+                pipeline = Pipeline()
+                rag_response = pipeline.combined_query_processed(extracted)
+
+                # FINAL DIAGNOSIS
+                diagnosis = get_app_diagnosis(model_name, extracted, rag_response)
 
                 # Parse the JSON string into a dictionary
                 try:
