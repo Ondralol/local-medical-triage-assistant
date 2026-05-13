@@ -11,6 +11,10 @@
 Copy the content of RAG, BM25 and models folder from the [link](https://huggingface.co/ondralol/nlp_project/tree/main) to your local folder and
 keep the same structure
 
+Note: for the first run, the programm will download another ~400MB embedding model from hugging, so first load might take while. Other runs should be faster
+
+### Download preprocess dataset from [link](https://huggingface.co/ondralol/nlp_project/tree/main) to `/dataset` folder
+
 ### Install local LLM
 After successfuly installing Ollama, install local LLM models by using
 ```
