@@ -1,15 +1,18 @@
-import time
 import streamlit as st
 import json
 from utils.medical_chat import DEFAULT_MODEL, extract_symptoms, prompt_checker, get_app_diagnosis, is_model_available
 from utils.pipeline import Pipeline
 st.set_page_config(page_title="Symptom Checker", layout="centered")
 
+@st.cache_resource
+def get_pipeline():
+    return Pipeline()
 st.title("Medical triage assistant")
 
 def reset_assessment() -> None:
     for key in ("user_input", "extracted", "conditions", "urgency", "recommendation"):
         st.session_state.pop(key, None)
+
 
 MODEL_OPTIONS = [
     DEFAULT_MODEL,
@@ -69,10 +72,9 @@ if analyze_clicked:
                 st.warning("The extracted symptoms do not seem valid. Please adjust the input accordingly.")
                 print(f"Prompt check response: {prompt_check}")
             else:
-                # RAG RESPONSE 
-                pipeline = Pipeline()
-                rag_response = pipeline.combined_query_processed(extracted)
-
+                # RAG RESPONSE
+                rag_response = get_pipeline().combined_query_processed(extracted)
+                print(rag_response)
                 # FINAL DIAGNOSIS
                 diagnosis = get_app_diagnosis(model_name, extracted, rag_response)
 
