@@ -7,6 +7,10 @@
 
 ## Setup
 
+### Download RAG, BM25 and BERT weights from Huggingface
+Copy the content of RAG, BM25 and models folder from the [link](https://huggingface.co/ondralol/nlp_project/tree/main) to your local folder and
+keep the same structure
+
 ### Install local LLM
 After successfuly installing Ollama, install local LLM models by using
 ```
