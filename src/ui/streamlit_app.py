@@ -66,18 +66,26 @@ if analyze_clicked:
         with st.spinner("Extracting symptoms and generating assessment..."):
 
             extracted = extract_symptoms(model_name, user_input.strip())
-
+            print(f"Extracted symptoms: {extracted}")
             prompt_check = prompt_checker(model_name, extracted)
             if prompt_check.lower() != "yes":
                 reset_assessment()
                 st.warning("The extracted symptoms do not seem valid. Please adjust the input accordingly.")
                 print(f"Prompt check response: {prompt_check}")
             else:
-                # RAG RESPONSE
-                rag_response = get_pipeline().combined_query_processed(extracted)
-                print(rag_response)
-                # FINAL DIAGNOSIS
-                diagnosis = get_app_diagnosis(model_name, extracted, rag_response)
+                # RAG and BM25 result
+                top_results_for_final = get_pipeline().combined_query_processed(extracted, disease_name = False)
+                top_results_for_bert = get_pipeline().combined_query_processed(extracted, disease_name = True)
+                print(f"RAG response: {top_results_for_final}")
+                
+                # TODO: Actually we need to add user query/symptoms as well to this I assume and both for the training, it's missing there as well
+                bert_input = f"Patient symptoms: {extracted}. Context: {top_results_for_bert}"
+                urgency = get_pipeline().bert_inference(bert_input)
+                
+                print(f"Urgency: {urgency}")
+
+                # Final output
+                diagnosis = get_app_diagnosis(model_name, extracted, top_results_for_final, urgency)
 
                 # Parse the JSON string into a dictionary
                 try:
@@ -89,6 +97,7 @@ if analyze_clicked:
 
 
                 st.session_state.extracted = extracted
+                print(f"Final results: {extracted}")
                 st.session_state.conditions = diagnosis_dict["conditions"]
                 st.session_state.urgency = diagnosis_dict["urgency"]
                 st.session_state.recommendation = diagnosis_dict["recommendation"]
