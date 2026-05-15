@@ -103,8 +103,8 @@ class Pipeline:
         return text.split(".")[0].strip()[:max_chars]
 
     def combined_query_processed(self, symptoms, k=3, max_length=200, disease_name = True):
-        res_rag = self.query_rag(symptoms, 4)
-        res_bm25 = self.query_bm25(symptoms, 4)
+        res_rag = self.query_rag(symptoms, 2)
+        res_bm25 = self.query_bm25(symptoms, 5)
 
         # Combine and drop duplicate rows
         combined = pd.concat([res_rag, res_bm25]).drop_duplicates(subset="question")
@@ -112,7 +112,7 @@ class Pipeline:
         symptoms = []
         for _, row in combined.iterrows():
             focus_areas.append(row["focus_area"])
-            symptoms.append(first_sentence(row["answer"], max_length)) # TODO: answer can be replaced with text_for_rag or text_for_bm25
+            symptoms.append(self.first_sentence(row["answer"], max_length)) # TODO: answer can be replaced with text_for_rag or text_for_bm25
 
         string_result = []
         for i in range(len(combined)):

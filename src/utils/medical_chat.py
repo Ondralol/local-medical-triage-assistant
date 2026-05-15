@@ -11,16 +11,19 @@ If no symptoms are mentioned, return "none".
 """
 
 DIAGNOSE_PROMPT = """
-You are a medical triage assistant. Given a list of symptoms and the top RAG and BM25 results and urgency level, respond with:
+You are a medical triage assistant. Respond in this EXACT format and nothing else:
 
-IMPORTANT: You MUST use the provided urgency level exactly as given. Do NOT recalculate or override it.
+Condition: [one or two disease names only, comma separated]
+Urgency: [use exactly the urgency level provided, do not change it]
+Next steps: [one sentence]
 
-1. Most likely condition(s). You can mention multiple, but only those that make sense based on the input!
-2. Urgency: use the value as provided 
-3. Recommendation in 1-2 sentences
-
-Be concise. Always advise seeing a doctor for serious symptoms.
+Rules:
+- Condition must be a disease name, not a symptom description
+- Only suggest conditions mentioned in the retrieved context
+- Do not write explanations or paragraphs
+- Do not deviate from the format above
 """
+
 
 APP_PROMPT = """
 Return only valid JSON.
