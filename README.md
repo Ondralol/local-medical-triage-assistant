@@ -5,6 +5,9 @@ We present an application called medical triage assistant which was created to d
 ![Pipeline showcase](diagrams/diagram_nlp.drawio.png)
 (Showcase of the whole pipeline)
 
+
+https://github.com/user-attachments/assets/ccb38401-0ae1-4430-9f00-fc368ec9a148
+
 (Showcase of the user interaction. Note: The processing time is cut)
 
 ## Detailed information about the pipeline can be found in the report TODO:
