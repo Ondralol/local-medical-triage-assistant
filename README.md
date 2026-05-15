@@ -1,4 +1,14 @@
-# NLP Project
+# Medical Triage Assistant
+We present an application called medical triage assistant which was created to determine the patient’s most likely medical condition, its urgency level, and suggest the next steps based on the patient’s text description of their symptoms. We created a pipeline that utilizes local LLMs to extract the patient’s symptoms from their input, combines Retrieval-Augmented-Generation (RAG) and Best Matching 25 (BM25) to retrieve a relevant context from a large medical corpus, and applies a fine-tuned BioBERT classifier to determine the medical urgency based on three levels LOW, MEDIUM and HIGH. All this information is then further processed and presented in a text format to the patient. The primary goal for the assistant is to provide an initial assessment of a patient, while addressing the privacy concerns of cloud-based AI medical systems since everything runs locally. The system is intended as a decision-support tool only and does not constitute professional medical advice. 
+
+## Preview 
+![Pipeline showcase](diagrams/diagram_nlp.drawio.png)
+(Showcase of the whole pipeline)
+
+(Showcase of the user interaction. Note: The processing time is cut)
+
+## Detailed information about the pipeline can be found in the report TODO:
+
 
 ## Prerequisites
 - Ollama (used to manage local LLMs) - Download [here](https://ollama.com/download/)
@@ -7,40 +17,34 @@
 
 ## Setup
 
-### Download RAG, BM25 and BERT weights from Huggingface
-Copy the content of RAG, BM25 and models folder from the [link](https://huggingface.co/ondralol/nlp_project/tree/main) to your local folder and
-keep the same structure
+### 1. Clone the project
 
-Note: for the first run, the programm will download another ~400MB embedding model from hugging, so first load might take while. Other runs should be faster
+### 2. Download neccessary files for RAG, BM25 and BERT from Huggingface
+Copy the contents of the `RAG`, `BM25`, `models` and `dataset` folders from the [link](https://huggingface.co/ondralol/nlp_project/tree/main) to your local project folder. Keep the same structure - meaning that the content of `RAG` folder from HuggingFace needs to go to the local `RAG` folder
 
-### Download preprocess dataset from [link](https://huggingface.co/ondralol/nlp_project/tree/main) to `/dataset` folder
+Note: for the first run, the programm will download another ~400MB embedding model from HuggingFace, so first load might take while. Other runs should be faster
 
-### Install local LLM
+### 3. Install local LLM
 After successfuly installing Ollama, install local LLM models by using
 ```
 ollama pull {model_name}
 ```
-For tested our project primarily with gemma4:e2b, but you may try with different models
+For tested our project primarily with `gemma4:e2b`, `llama3.2:3b `qwen2.5:0.5b`, but you may try with different models but making simple changes
 
-### Run the application
+### 4. Download all the dependencies
 Before running for the first time download dependecies by using
 ```
 uv sync
 ```
-and then run the application using
-```
-uv run src/main.py --model <model_name>
-```
-where <model_name> is the name of local LLM you downloaded with ollama
 
-### Run the Streamlit UI
-After syncing dependencies, start the web UI with
+### 5. Run the application
+You can run the application using
 ```
-uv run streamlit run src/streamlit_app.py
+uv run src/main.py
 ```
-You can change the Ollama model from the sidebar or keep the default.
 
-### Run the jupyter notebooks 
+
+## Running the jupyter notebook
 First run
 ```
 uv sync
@@ -53,19 +57,11 @@ Finally to open the notebook run
 ```
 uv run jupyter notebook
 ```
+and open the appropriate notebook
 
-Note: if using inside sagemaker, copy the pyproject.toml and do the same step. Then select the `NLP Project` kernel.
+Note: if using inside sagemaker, copy the pyproject.toml and do the same steps. Then select the `NLP Project` kernel.
 
 
-### Code strucure
-- In `/notebooks` are notebooks used for dataset exploration preprocessing
+## Project strucure
+- In `/notebooks` are notebooks used for dataset exploration preprocessing and model training
 - Main application source code is in the `src/` folder
-
-Have you ever wondered where medical chatbots or intelligent search engines for health information get their knowledge? The answer lies in large datasets like MedQuAD! This rich resource provides a treasure trove of real-world medical questions and informative answers, paving the way for advancements in Natural Language Processing (NLP) and Information Retrieval (IR) within the healthcare domain.
-
-What is MedQuAD?
-MedQuAD, short for Medical Question Answering Dataset, is a collection of question-answer pairs meticulously curated from 12 trusted National Institutes of Health (NIH) websites. These websites cover a wide range of health topics, from cancer.gov to GARD (Genetic and Rare Diseases Information Resource).
-
-### Datasets
-- To match the diseases and symptoms we used `MedQuAD: Medical Question-Answer Dataset`. Which is a large dataset containing collection of question-answer pairs covering a wide range of medical topics. You can find the dataset [here](https://www.kaggle.com/datasets/pythonafroz/medquad-medical-question-answer-for-ai-research?resource=download)
-- Since the dataset contains a lot of question from different areas and we are mainly interested in the symptopms, we filtered the dataset to only get the questions that contain one of the following: "symptom", "signs", "cause", "disease", "condition", "syndrome"
