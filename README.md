@@ -10,8 +10,42 @@ https://github.com/user-attachments/assets/ccb38401-0ae1-4430-9f00-fc368ec9a148
 
 (Showcase of the user interaction. Note: The processing time is cut)
 
-## Detailed information about the pipeline can be found in the report TODO:
+## Detailed information about the pipeline
 
+## Pipeline
+
+### 1. Symptom Extraction
+
+User input is passed through a local LLM via **Ollama**, guided by a constrained prompt that extracts only the medically relevant symptoms. For example:
+
+> **Input:** `"I have a headache, a fever and I'm feeling sick and tired"`  
+> **Extracted:** `"headache, fever, sick, tired"`
+
+### 2. Retrieval: RAG + BM25
+
+The extracted symptoms are used to query the **MedQuAD** dataset (Ben Abacha & Demner-Fushman, 2019), which contains disease names (`focus_area`) and symptom descriptions (`answer`). Two retrieval strategies run in parallel:
+
+- **RAG** — Symptoms are embedded using [`pritamdeka/S-PubMedBert-MS-MARCO`], a medically fine-tuned sentence transformer, and matched against pre-embedded `answer` fields to retrieve the **top k** semantically similar records.
+- **BM25** — A keyword based search over the same dataset, requiring no embeddings, returning the **top k** records by token overlap.
+
+### 3. Urgency Classification
+
+The retrieved record disease name and the first **175 characters** of the symptom description. 
+These records are combined with the extracted symptoms and passed to a fine tuned **BERT classifier**, which predicts one of three urgency levels:
+
+| Level |
+|-------|
+| `LOW` |
+| `MEDIUM`|
+| `HIGH` |
+
+### 4. Structured Response Generation
+
+The local LLM is used a final time with the extracted symptoms, the filtered retrieved records, and the BERT urgency prediction. It produces a structured output containing:
+
+- **Urgency level**
+- **Most likely condition**
+- **Recommended next steps**
 
 ## Prerequisites
 - Ollama (used to manage local LLMs) - Download [here](https://ollama.com/download/)
