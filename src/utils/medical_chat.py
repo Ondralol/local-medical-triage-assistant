@@ -3,16 +3,20 @@ import ollama
 DEFAULT_MODEL = "qwen2.5:0.5b"
 
 EXTRACT_PROMPT = """
-Extract only the medically relevant symptoms and injuries from the user's message.
-Infer obvious medical implications from the wording.
-Treat trauma descriptions as medical injuries.
-Return a short comma-separated list of symptoms only. No explanation, no preamble.
+You are a symptom extraction tool.
+Extract ONLY the symptoms, injuries, or physical complaints explicitly stated by the user.
+Do NOT infer, assume, or add anything not directly mentioned.
+Return a comma-separated list only. No explanation, no preamble.
+If no symptoms are mentioned, return "none".
 """
 
 DIAGNOSE_PROMPT = """
-You are a medical triage assistant. Given a list of symptoms and the RAG response, respond with:
-1. Most likely condition(s)
-2. Urgency: LOW / MEDIUM / HIGH / EMERGENCY
+You are a medical triage assistant. Given a list of symptoms and the top RAG and BM25 results and urgency level, respond with:
+
+IMPORTANT: You MUST use the provided urgency level exactly as given. Do NOT recalculate or override it.
+
+1. Most likely condition(s). You can mention multiple, but only those that make sense based on the input!
+2. Urgency: use the value as provided 
 3. Recommendation in 1-2 sentences
 
 Be concise. Always advise seeing a doctor for serious symptoms.
@@ -35,10 +39,14 @@ The output must be parseable by json.loads().
 """
 
 PROMPT_CHECKER = """
-Is this a list of symptoms that a person might have? 
-Answer "yes" or "no" in this exact format. No explanation, no preamble.
-"""
+Does the text describe medical symptoms, injuries, or conditions? Reply "yes" or "no" only.
 
+Examples:
+"fever, cough, sore throat" -> yes
+"headache, feeling sick" -> yes  
+"what is the weather" -> no
+"book me a table" -> no
+"""
 
 def is_model_available(model: str) -> bool:
     try:
@@ -70,13 +78,14 @@ def extract_symptoms(model: str, user_input: str) -> str:
     )
     return response.message.content.strip()
 
-def get_app_diagnosis(model: str, symptoms: str, rag_response: str) -> str:
+def get_app_diagnosis(model: str, symptoms: str, rag_response: str, urgency : str) -> str:
     response = ollama.chat(
         model=model,
         messages=[
-            {"role": "system", 
-            "content": f"{DIAGNOSE_PROMPT}{APP_PROMPT}\n\nRelevant medical context:\n{rag_response}"},
-            {"role": "user", "content": f"Symptoms: {symptoms}"},
+            {"role": "system", "content": f"{DIAGNOSE_PROMPT}\n{APP_PROMPT}"},
+            {"role": "user", "content": f"Reference context (do NOT assume patient has these):\n{rag_response}"},
+            {"role": "assistant", "content": "Understood, I will use this only as background reference."},
+            {"role": "user", "content": f"Pre-determined urgency (use exactly): {urgency}\nPatient symptoms: {symptoms}"},
         ],
     )
     return response.message.content.strip()
@@ -88,5 +97,7 @@ def prompt_checker(model: str, symptoms: str) -> str:
             {"role": "system", "content": PROMPT_CHECKER},
             {"role": "user", "content": symptoms},
         ],
+        options={"temperature": 0} # always pick the option with highest probability (we were getting "no" answer for 
+                                   # correct results sometimes
     )
     return response.message.content.strip()
