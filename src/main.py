@@ -4,7 +4,7 @@ from pathlib import Path
 from streamlit.web import cli as stcli
 
 
-def main() -> int:
+def main():
     app_path = Path(__file__).resolve().parent / "ui" / "streamlit_app.py"
     sys.argv = ["streamlit", "run", str(app_path)]
     return stcli.main()
