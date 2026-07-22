@@ -1,37 +1,41 @@
 # Medical Triage Assistant
-We present an application called medical triage assistant which was created to determine the patient’s most likely medical condition, its urgency level, and suggest the next steps based on the patient’s text description of their symptoms. We created a pipeline that utilizes local LLMs to extract the patient’s symptoms from their input, combines Retrieval-Augmented-Generation (RAG) and Best Matching 25 (BM25) to retrieve a relevant context from a large medical corpus, and applies a fine-tuned BioBERT classifier to determine the medical urgency based on three levels LOW, MEDIUM and HIGH. All this information is then further processed and presented in a text format to the patient. **The primary goal for the assistant is to provide an initial assessment of a patient, while addressing the privacy concerns of cloud-based AI medical systems since everything runs locally. The system is intended as a decision-support tool only and does not constitute professional medical advice.** 
 
-## Preview 
-![Pipeline showcase](diagrams/diagram_nlp.drawio.png)
-(Showcase of the whole pipeline)
+We present an application called **Medical Triage Assistant**, created to determine a patient's most likely medical condition, its urgency level, and the recommended next steps based on a free-text description of their symptoms. The pipeline uses local LLMs to extract symptoms from the patient's input, combines Retrieval-Augmented Generation (RAG) and Best Matching 25 (BM25) to retrieve relevant context from a large medical corpus, and applies a fine-tuned BioBERT classifier to determine the medical urgency across three levels: `LOW`, `MEDIUM`, and `HIGH`. All of this information is then processed and presented to the patient in a structured text format.
+
+**The primary goal of the assistant is to provide an initial assessment of a patient that is both private and explainable. Privacy is addressed since everything runs locally, avoiding the cloud-based nature of typical AI medical systems. Explainability is addressed by grounding the assessment in retrieved evidence from a real medical corpus (via RAG and BM25) rather than relying on opaque LLM output alone. The system is intended as a decision-support tool only and does not constitute professional medical advice.**
+
+## Full report: 
+View the full report [here](resources/report.pdf)
+
+## Preview
+
+![Pipeline showcase](diagrams/vertical_diagram.png)
 
 
 https://github.com/user-attachments/assets/ccb38401-0ae1-4430-9f00-fc368ec9a148
-
-(Showcase of the user interaction. Note: The processing time is cut)
+(Showcase of the user interaction. Note: the processing time is cut.)
 
 ## Detailed information about the pipeline
-
-## Pipeline
 
 ### 1. Symptom Extraction
 
 User input is passed through a local LLM via **Ollama**, guided by a constrained prompt that extracts only the medically relevant symptoms. For example:
 
-> **Input:** `"I have a headache, a fever and I'm feeling sick and tired"`  
+> **Input:** `"I have a headache, a fever and I'm feeling sick and tired"`
 > **Extracted:** `"headache, fever, sick, tired"`
 
 ### 2. Retrieval: RAG + BM25
 
-The extracted symptoms are used to query the **MedQuAD** dataset (Ben Abacha & Demner-Fushman, 2019), which contains disease names (`focus_area`) and symptom descriptions (`answer`). Two retrieval strategies run in parallel:
+The extracted symptoms are used to query the **MedQuAD** dataset, which contains disease names (`focus_area`) and symptom descriptions (`answer`) pairs. Two retrieval strategies run in parallel:
 
-- **RAG** — Symptoms are embedded using [`pritamdeka/S-PubMedBert-MS-MARCO`], a medically fine-tuned sentence transformer, and matched against pre-embedded `answer` fields to retrieve the **top k** semantically similar records.
-- **BM25** — A keyword based search over the same dataset, requiring no embeddings, returning the **top k** records by token overlap.
+- **RAG** - Symptoms are embedded using [`pritamdeka/S-PubMedBert-MS-MARCO`], a medically fine-tuned sentence transformer, and matched against pre-embedded `answer` fields to retrieve the **top 2** semantically similar records.
+- **BM25** - A keyword-based search over the same dataset, requiring no embeddings, returning the **top 5** records by token overlap.
+
+The indices returned by both methods are merged (duplicates removed), giving up to **7** unique retrieved records.
 
 ### 3. Urgency Classification
 
-The retrieved record disease name and the first **175 characters** of the symptom description. 
-These records are combined with the extracted symptoms and passed to a fine tuned **BERT classifier**, which predicts one of three urgency levels:
+Each retrieved record is filtered down to its disease name (`focus_area`) and the first **175 characters** of its symptom description (`answer`). These filtered records are combined with the originally extracted symptoms and passed to a fine-tuned **BioBERT classifier** (`biobert-base-cased-v1.2`), which predicts one of three urgency levels:
 
 | Level |
 |-------|
@@ -41,10 +45,10 @@ These records are combined with the extracted symptoms and passed to a fine tune
 
 ### 4. Structured Response Generation
 
-The local LLM is used a final time with the extracted symptoms, the filtered retrieved records, and the BERT urgency prediction. It produces a structured output containing:
+The local LLM is used a final time with the extracted symptoms, the filtered retrieved records, and the BioBERT urgency prediction. It produces a structured output containing:
 
 - **Urgency level**
-- **Most likely condition**
+- **Most likely condition(s)**
 - **Recommended next steps**
 
 ## Prerequisites
