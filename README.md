@@ -7,14 +7,17 @@ We present an application called **Medical Triage Assistant**, created to determ
 ## Full report: 
 View the full report [here](resources/report.pdf)
 
-## Preview
-
-![Pipeline showcase](diagrams/vertical_diagram.png)
-
+## Demo
 
 https://github.com/user-attachments/assets/ccb38401-0ae1-4430-9f00-fc368ec9a148
 
-(Showcase of the user interaction. Note: the processing time is cut.)
+*Showcase of the user interaction (processing time is cut).*
+
+## Pipeline overview
+
+<p align="center">
+  <img src="diagrams/vertical_diagram.png" alt="Pipeline diagram" width="320">
+</p>
 
 ## Detailed information about the pipeline
 
