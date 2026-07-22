@@ -13,6 +13,7 @@ View the full report [here](resources/report.pdf)
 
 
 https://github.com/user-attachments/assets/ccb38401-0ae1-4430-9f00-fc368ec9a148
+
 (Showcase of the user interaction. Note: the processing time is cut.)
 
 ## Detailed information about the pipeline
