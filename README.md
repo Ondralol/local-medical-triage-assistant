@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/ccb38401-0ae1-4430-9f00-fc368ec9a148
 ## Pipeline overview
 
 <p align="center">
-  <img src="diagrams/vertical_diagram.png" alt="Pipeline diagram" width="320">
+  <img src="diagrams/vertical_diagram.png" alt="Pipeline diagram" width="750">
 </p>
 
 ## Detailed information about the pipeline
